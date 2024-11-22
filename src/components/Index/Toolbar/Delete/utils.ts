@@ -26,6 +26,8 @@ export const deleteNote = async (currentNoteID: number, setCurrentNoteID: (value
         deleteLocalNote(currentNoteID);
         setCurrentNoteID(-1);
         return;
+    } else {
+        await deleteNoteFiles(currentNoteID, session.user.id);
     }
 
     const { data, error } = await supabase
@@ -39,6 +41,31 @@ export const deleteNote = async (currentNoteID: number, setCurrentNoteID: (value
     } else {
         deleteNoteDisplay();
         setCurrentNoteID(-1);
+    }
+}
+
+/**
+ * Deletes all the files from a note.
+ * @param noteID Note ID to delete files from.
+ * @param uuid UUID of user to find user to delete.
+ */
+const deleteNoteFiles = async (noteID: number, uuid: string) => {
+    const path = uuid + "/" + noteID + "/";
+
+    const { data: files, error: listError } = await supabase.storage.from("notes").list(path);
+
+    if (listError) {
+        console.error("Error listing files:", listError);
+        return;
+    }
+
+    if (files?.length) {
+        const filePaths = files.map((file) => path + file.name);
+        const { error: removeError } = await supabase.storage.from("notes").remove(filePaths);
+
+        if (removeError) {
+            console.error("Error removing files:", removeError);
+        }
     }
 }
 

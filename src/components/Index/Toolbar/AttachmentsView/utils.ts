@@ -12,7 +12,7 @@ export const getNoteAttachments = async (userId: string, noteID: number) => {
     try {
         const { data, error } = await supabase.storage
             .from('notes')
-            .list(`${userId}/${noteID}/`, { limit: 100, offset: 0 });
+            .list(`${userId}/${noteID}`, { offset: 0 });
 
         if (error) {
             console.error('Error fetching files:', error);
@@ -20,14 +20,18 @@ export const getNoteAttachments = async (userId: string, noteID: number) => {
         }
 
         // map the file data to return only the file name and the link
+        let attachmentId = 0;
         const links: Attachment[] = data.map((file) => {
             const link = supabase.storage
                 .from('notes')
                 .getPublicUrl(`${userId}/${noteID}/${file.name}`).data.publicUrl;
-
+            
+            attachmentId += 1;
             return {
-                title: truncate(file.name, 20) || file.name,
+                id: attachmentId,
+                title: truncate(file.name, 14) || file.name,
                 path: link,
+                updatedAt: file.updated_at
             };
         });
 

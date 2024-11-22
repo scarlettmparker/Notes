@@ -20,7 +20,7 @@ export const truncate = (str: string, truncate: number) => {
  * @param fetchNoteIDs Fetch note IDs (from local storage).
  */
 export const createLocalNote = (setCurrentNoteID: (value: number) => void, newNoteID: Accessor<number>, fetchNoteIDs: () => void) => {
-    localStorage.setItem(`note-${newNoteID()}-title`, "Untitled note");
+    localStorage.setItem(`note-${newNoteID()}-title`, "");
     localStorage.setItem(`note-${newNoteID()}-content`, "");
 
     setCurrentNoteID(newNoteID());

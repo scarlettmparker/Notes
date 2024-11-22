@@ -1,6 +1,8 @@
 export interface Attachment {
-    path: string
-    title: string
+    id?: number;
+    path: string;
+    title: string;
+    updatedAt: string;
 }
 
 export default null;

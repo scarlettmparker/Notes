@@ -1,4 +1,5 @@
-import { createEffect } from "solid-js";
+import { onMount } from "solid-js";
+import { autogrow } from "./utils";
 import TextEditorProps from "./props";
 
 /**
@@ -11,10 +12,17 @@ import TextEditorProps from "./props";
  */
 const TextEditor = ({ style, placeholder, content, setContent, onBlur }: TextEditorProps) => {
     const inputStyle = "outline-none w-full text-left overflow-hidden resize-none";
-    
+    let ref!: HTMLTextAreaElement;
+
+    onMount(() => {
+        queueMicrotask(() => {
+            autogrow(ref);
+        });
+    });
+
     return (
-        <textarea spellcheck={false} class={`${style} ${inputStyle}`} style="field-sizing: content;" value={content()} placeholder={placeholder}
-            onFocus={(e) => e.target.placeholder = ""} onBlur={(e) => { e.target.placeholder = placeholder!; if (onBlur) onBlur(e); }} onInput={(e) => setContent(e.target.value)} />
+        <textarea ref={ref} spellcheck={false} class={`${style} ${inputStyle}`} value={content()} placeholder={placeholder} rows={1} onFocus={(e) => e.target.placeholder = ""}
+            onBlur={(e) => { e.target.placeholder = placeholder!; if (onBlur) onBlur(e); }} onInput={(e) => { setContent(e.target.value); autogrow(e.target); }} />
     );
 };
 
