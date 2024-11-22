@@ -5,6 +5,7 @@ import AuthButton from "~/components/Login/AuthButton";
 import FormInputBox from "~/components/Login/FormInputBox";
 import GitHubAuth from "~/components/Login/GitHubAuth";
 import WelcomeText from "~/components/Login/WelcomeText";
+import { MetaProvider, Title } from "@solidjs/meta";
 
 /**
  * Login form modal, changeable with a registration form.
@@ -31,17 +32,20 @@ function Login() {
     const continueText = () => (register() ? "continue" : "login")
 
     return (
-        <div class={`w-[600px] h-[440px] font-['Open_Sans'] mobile-login:w-full mobile-login:h-full mobile-login:rounded text-thunder items-center flex flex-col gap-2 bg-white absolute ${LM_ALIGN}
+        <MetaProvider>
+            <Title>{buttonText()}</Title>
+            <div class={`w-[600px] h-[440px] font-['Open_Sans'] mobile-login:w-full mobile-login:h-full mobile-login:rounded text-thunder items-center flex flex-col gap-2 bg-white absolute ${LM_ALIGN}
             top-1/2 -translate-y-1/2 small:top-6 small:-translate-y-0 small:overflow-auto rounded-2xl outline outline-1 mobile-login:outline-0 outline-gray-300 shadow-md mobile-login:shadow-none`}>
-            <span class="absolute right-12 top-6 text-md cursor-pointer select-none mobile-login:right-6 hover:text-bubblegum px-2 py-1 rounded-lg hover:bg-slate-100" 
-                onclick={() => setRegister(!register())}>{registerText()}</span>
-            <WelcomeText loginText={loginText} />
-            <FormInputBox text={"Email"} type={"email"} ref={email} setRef={setEmail} placeholder="email@example.com" />
-            <FormInputBox text={"Password"} ref={password} setRef={setPassword} type={"password"} />
-            {error() && <span class="text-red-500">{error()}</span>}
-            <AuthButton text={buttonText} register={register} email={email} password={password} setError={setError} />
-            <GitHubAuth continueText={continueText} setError={setError} />
-        </div>
+                <span class="absolute right-12 top-6 text-md cursor-pointer select-none mobile-login:right-6 hover:text-bubblegum px-2 py-1 rounded-lg hover:bg-slate-100"
+                    onclick={() => setRegister(!register())}>{registerText()}</span>
+                <WelcomeText loginText={loginText} />
+                <FormInputBox text={"Email"} type={"email"} ref={email} setRef={setEmail} placeholder="email@example.com" />
+                <FormInputBox text={"Password"} ref={password} setRef={setPassword} type={"password"} />
+                {error() && <span class="text-red-500">{error()}</span>}
+                <AuthButton text={buttonText} register={register} email={email} password={password} setError={setError} />
+                <GitHubAuth continueText={continueText} setError={setError} />
+            </div>
+        </MetaProvider>
     )
 }
 
