@@ -22,7 +22,7 @@ const TextEditor = ({ style, placeholder, content, setContent, onBlur }: TextEdi
 
     return (
         <textarea ref={ref} spellcheck={false} class={`${style} ${inputStyle}`} value={content()} placeholder={placeholder} rows={1} onFocus={(e) => e.target.placeholder = ""}
-            onBlur={(e) => { e.target.placeholder = placeholder!; if (onBlur) onBlur(e); }} onInput={(e) => { setContent(e.target.value); autogrow(e.target); }} />
+            onBlur={(e) => { e.target.placeholder = placeholder!; if (onBlur) onBlur(e); }} onInput={(e) => { setContent(e.target.value); autogrow(e.target); }} onfocus={(e) => autogrow(e.target)} />
     );
 };
 
